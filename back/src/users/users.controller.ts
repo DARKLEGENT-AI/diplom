@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
+import * as fs from 'fs'
 import * as path from 'path'
 import { UsersService } from './users.service'
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard'
@@ -10,6 +11,7 @@ import { UserRole } from '../common/enums/role.enum'
 import { CurrentUser } from '../common/decorators/current-user.decorator'
 import { UpdateLocationDto } from './dto/update-location.dto'
 import { UpdateDoctorProfileDto } from './dto/update-doctor-profile.dto'
+import { avatarsUploadDir } from '../common/upload-paths'
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,7 +34,10 @@ export class UsersController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: path.resolve(process.cwd(), 'uploads', 'avatars'),
+        destination: (_req, _file, callback) => {
+          fs.mkdirSync(avatarsUploadDir, { recursive: true })
+          callback(null, avatarsUploadDir)
+        },
         filename: (_, file, callback) => {
           const ext = path.extname(file.originalname) || '.png'
           const safeName = `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`

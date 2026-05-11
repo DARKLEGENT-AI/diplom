@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import * as path from 'path'
 import * as express from 'express'
 import { AppModule } from './app.module'
+import { uploadsRoot } from './common/upload-paths'
 
 let cachedServer: express.Express | undefined
 
@@ -16,7 +16,7 @@ async function createServer() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 
-  app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
+  app.use('/uploads', express.static(uploadsRoot))
   app.setGlobalPrefix('v1')
   app.useGlobalPipes(
     new ValidationPipe({
