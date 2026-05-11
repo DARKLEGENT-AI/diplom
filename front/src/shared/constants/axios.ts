@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { getAuthToken } from './auth'
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || 'https://diplom-back-alpha.vercel.app/v1'
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://diplom-back-alpha.vercel.app'
 
 export const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL.replace(/\/$/, '')}/v1`,
 })
 
 axiosInstance.interceptors.request.use((config) => {
