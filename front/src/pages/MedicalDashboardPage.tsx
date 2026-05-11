@@ -12,6 +12,7 @@ import {
   type AppointmentSlot,
   type MedicalDoctor,
 } from '@src/shared/api/medical'
+import { API_BASE_URL } from '@src/shared/constants/axios'
 
 const formatSlotTime = (slot: AppointmentSlot) => {
   const start = new Date(slot.startsAt)
@@ -21,7 +22,7 @@ const formatSlotTime = (slot: AppointmentSlot) => {
 
 const getAvatarUrl = (avatarUrl?: string) => {
   if (!avatarUrl) return ''
-  const base = import.meta.env.VITE_API_URL?.replace(/\/v1$/, '') || ''
+  const base = API_BASE_URL.replace(/\/v1$/, '')
   return `${base}${avatarUrl}`
 }
 

@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { getAuthToken } from './auth'
 
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'https://diplom-back-fmvrybuzv-darklgnt.vercel.app/v1'
+
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
 })
 
 axiosInstance.interceptors.request.use((config) => {

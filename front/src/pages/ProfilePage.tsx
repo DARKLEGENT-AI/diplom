@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { getMe, type UserProfile } from '@src/shared/api/auth'
 import { updateMyDoctorProfile, updateMyLocation, uploadAvatar } from '@src/entities/User/api/api'
 import { clearAuthToken } from '@src/shared/constants/auth'
+import { API_BASE_URL } from '@src/shared/constants/axios'
 import { routes } from '@src/app/constants/routes'
 import { DOCTOR_SPECIALTIES, POPULAR_RUSSIAN_CITIES } from '@src/shared/constants/cities'
 import {
@@ -16,7 +17,7 @@ import {
 
 const getAvatarUrl = (avatarUrl?: string) => {
   if (!avatarUrl) return ''
-  const base = import.meta.env.VITE_API_URL?.replace(/\/v1$/, '') || ''
+  const base = API_BASE_URL.replace(/\/v1$/, '')
   return `${base}${avatarUrl}`
 }
 
