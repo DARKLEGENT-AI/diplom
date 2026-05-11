@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import * as PDFDocument from 'pdfkit'
+import PDFDocument = require('pdfkit')
 import * as ExcelJS from 'exceljs'
 import * as fs from 'fs'
 import * as path from 'path'
