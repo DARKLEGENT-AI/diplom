@@ -5,7 +5,9 @@ import * as path from 'path'
 import * as express from 'express'
 import { AppModule } from './app.module'
 
-async function bootstrap() {
+let cachedServer: express.Express | undefined
+
+async function createServer() {
   const app = await NestFactory.create(AppModule)
   app.enableCors({
     origin: true,
@@ -23,8 +25,24 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   )
-  const port = process.env.PORT || 4000
-  await app.listen(port)
+
+  await app.init()
+  return app.getHttpAdapter().getInstance() as express.Express
 }
 
-bootstrap()
+export default async function handler(req: express.Request, res: express.Response) {
+  if (!cachedServer) {
+    cachedServer = await createServer()
+  }
+  return cachedServer(req, res)
+}
+
+async function bootstrap() {
+  const server = await createServer()
+  const port = process.env.PORT || 4000
+  server.listen(port)
+}
+
+if (!process.env.VERCEL) {
+  bootstrap()
+}
