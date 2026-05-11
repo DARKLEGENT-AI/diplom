@@ -1,0 +1,29 @@
+import '@src/app/styles/index.css'
+import '@src/app/styles/general.scss'
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+
+import { Root } from '@src/app/components/Root'
+
+const mountApplication = async () => {
+  const container = document.getElementById('root')
+  if (!container) {
+    throw new Error('Root element not found')
+  }
+
+  const root = createRoot(container)
+  root.render(
+    import.meta.env.VITE_STRICT_MODE === 'true' ? (
+      <StrictMode>
+        <Root />
+      </StrictMode>
+    ) : (
+      <Root />
+    ),
+  )
+}
+
+mountApplication().catch((error) => {
+  console.error(error)
+})
