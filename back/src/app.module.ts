@@ -18,16 +18,27 @@ import { MedicalModule } from './medical/medical.module'
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('database.host'),
-        port: config.get<number>('database.port'),
-        username: config.get<string>('database.username'),
-        password: config.get<string>('database.password'),
-        database: config.get<string>('database.name'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: (config: ConfigService) => {
+        const databaseUrl = config.get<string>('database.url')
+
+        return {
+          type: 'postgres',
+          ...(databaseUrl
+            ? {
+                url: databaseUrl,
+                ssl: { rejectUnauthorized: false },
+              }
+            : {
+                host: config.get<string>('database.host'),
+                port: config.get<number>('database.port'),
+                username: config.get<string>('database.username'),
+                password: config.get<string>('database.password'),
+                database: config.get<string>('database.name'),
+              }),
+          autoLoadEntities: true,
+          synchronize: true,
+        }
+      },
     }),
     AuthModule,
     UsersModule,

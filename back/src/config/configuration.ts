@@ -1,6 +1,7 @@
 export default () => ({
   port: Number(process.env.PORT || 4000),
   database: {
+    url: process.env.DATABASE_URL,
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 5432),
     username: process.env.DB_USER || 'postgres',
